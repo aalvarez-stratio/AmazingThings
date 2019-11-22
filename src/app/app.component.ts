@@ -7,18 +7,28 @@ import * as THREE from 'three';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public scene: any;
-  public camera: any;
-  public renderer: any;
+  public scene: THREE.Scene;
+  public camera: THREE.Camera;
+  public renderer: THREE.Renderer;
+  public cube: THREE.Mesh;
   title = 'AmazingThings';
 
-  ngOnInit() {
+  constructor() {
+    this.render = this.render.bind(this);
+  }
 
+  ngOnInit() {
+    this.setUpScene();
+    this.render();
   }
 
   render() {
-    requestAnimationFrame( this.render );
-    this.renderer.render(this.scene, this.camera);
+    if (this.renderer) {
+      requestAnimationFrame( this.render );
+      this.cube.position.x += 0.01;
+      this.cube.rotation.y += 0.01;
+      this.renderer.render(this.scene, this.camera);
+    }
   }
 
 
@@ -32,8 +42,8 @@ export class AppComponent implements OnInit {
 
     var geometry = new THREE.BoxGeometry( 1, 1, 1 );
     var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-    var cube = new THREE.Mesh( geometry, material );
-    this.scene.add( cube );
+    this.cube = new THREE.Mesh( geometry, material );
+    this.scene.add( this.cube );
 
     this.camera.position.z = 5;
   }
